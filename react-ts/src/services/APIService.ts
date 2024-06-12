@@ -1,9 +1,11 @@
 import { formatMovie } from "../utils/transformers";
-import config from "../../config/config.json";
+import Movie from "../models/Movie";
+import { ApiMovieData } from "../utils/transformers";
+import { apiConfig } from "../config/config";
 
 class APIService {
   static getMovies() {
-    const apiKey = config.apiKey;
+    const apiKey = apiConfig.apiKey;
     console.log("API Key:", apiKey); //
     const url = "https://api.themoviedb.org/3/discover/movie";
 

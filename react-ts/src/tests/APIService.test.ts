@@ -1,8 +1,10 @@
 import APIService from "../services/APIService";
 
 // Mocking config outside the test
-jest.mock("../../config/config.json", () => ({
-  apiKey: "your_mock_api_key",
+jest.mock("../config/config", () => ({
+  apiConfig: {
+    apiKey: "your_mock_api_key",
+  },
 }));
 
 describe("APIService", () => {
@@ -26,7 +28,7 @@ describe("APIService", () => {
               },
             ],
           }),
-        headers: new Headers(), // Ajusta las cabeceras según sea necesario
+        headers: new Headers(),
         redirected: false,
         status: 200,
         statusText: "OK",
