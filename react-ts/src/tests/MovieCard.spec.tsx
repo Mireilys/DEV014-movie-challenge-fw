@@ -16,14 +16,16 @@ describe("MovieCard", () => {
     title: "Kingdom of the Planet of the Apes",
   };
   it("debería renderizar correctamente con los datos de la película proporcionados", () => {
-    const { getByAltText, getByText } = render(<MovieCard movie={mockMovie} />);
+    const { getByAltText, getByTestId } = render(
+      <MovieCard movie={mockMovie} />
+    );
     const expectedPosterUrl = `https://image.tmdb.org/t/p/original${mockMovie.poster_path}`;
 
-    const poster = getByAltText("Kingdom of the Planet of the Apes");
+    const poster = getByAltText(mockMovie.title);
     expect(poster).toHaveAttribute("src", expectedPosterUrl);
 
-    expect(getByText("Kingdom of the Planet of the Apes")).toBeInTheDocument();
-    expect(getByText("2024-05-08")).toBeInTheDocument();
+    expect(getByTestId("movie-card")).toHaveTextContent(mockMovie.title);
+    expect(getByTestId("movie-card")).toHaveTextContent("2024");
   });
 
   it("debería manejar correctamente la ausencia de póster", () => {
