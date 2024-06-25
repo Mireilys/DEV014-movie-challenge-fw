@@ -4,21 +4,29 @@ import APIService from "../services/APIService";
 import { Movie } from "../models/Movie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import Pagination from "./Pagination";
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("Fetching movies...");
+    fetchMovies(currentPage);
+  }, [currentPage]);
+
+  const fetchMovies = (page: number) => {
+    console.log("Fetching movies for page:", page);
     setIsLoading(true);
     setError(null);
 
-    APIService.getMovies()
-      .then((movies) => {
-        console.log("Movies fetched:", movies);
-        setMovies(movies);
+    APIService.getMovies({ filters: { page } })
+      .then((data) => {
+        console.log("Movies fetched:", data);
+        setMovies(data.movies);
+        setTotalPages(data.metaData.pagination.totalPages);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -28,7 +36,11 @@ const Home: React.FC = () => {
         );
         setIsLoading(false);
       });
-  }, []);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   if (isLoading) {
     return (
@@ -47,7 +59,16 @@ const Home: React.FC = () => {
     );
   }
 
-  return <MovieList movies={movies} />;
+  return (
+    <div className="home-container">
+      <MovieList movies={movies} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onSelectPage={handlePageChange}
+      />
+    </div>
+  );
 };
 
 export default Home;

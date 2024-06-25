@@ -4,7 +4,8 @@ import { ApiMovieData } from "../utils/transformers";
 import { apiConfig } from "../config/config";
 
 class APIService {
-  static getMovies() {
+  static getMovies(params = { filters: { page: 1 } }) {
+    const { page } = params.filters;
     const apiKey = apiConfig.apiKey;
     console.log("API Key:", apiKey); //
     const url = "https://api.themoviedb.org/3/discover/movie";
@@ -22,7 +23,12 @@ class APIService {
       })
       .then((data) => {
         console.log("Received data from API:", data);
-        return data.results.map(formatMovie);
+        const movies = data.results.map(formatMovie);
+        const pagination = {
+          currentPage: data.page,
+          totalPages: data.total_pages,
+        };
+        return { metaData: { pagination }, movies };
       })
       .catch((error) => {
         console.error(

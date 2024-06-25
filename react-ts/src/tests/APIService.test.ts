@@ -60,8 +60,6 @@ describe("APIService", () => {
         }
       );
 
-      // Here you can add your assertions for the movies data returned
-      // For example:
       expect(movies.length).toBe(2);
       expect(movies[0].title).toBe("Kingdom of the Planet of the Apes");
     });
