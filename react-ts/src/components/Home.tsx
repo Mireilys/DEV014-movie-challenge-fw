@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom"; //*se agrega el hook useSearchParams para gestionar el estado de la URL
 import MovieList from "./MovieList";
 import APIService from "../services/APIService";
 import { Movie } from "../models/Movie";
@@ -9,9 +10,11 @@ import Pagination from "./Pagination";
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState<string | null>(null);
+
+  const [searchParams, setSearchParams] = useSearchParams(); //*Llamar al servicio getMovies cada vez que cambie el query param currentPage:Utiliza un efecto para observar los cambios en currentPage y llamar a fetchMovies con el nuevo valor.
+  const currentPage = parseInt(searchParams.get("currentPage") || "1");
 
   useEffect(() => {
     fetchMovies(currentPage);
@@ -39,7 +42,7 @@ const Home: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setSearchParams({ currentPage: page.toString() });
   };
 
   if (isLoading) {

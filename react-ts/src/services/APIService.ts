@@ -7,8 +7,8 @@ class APIService {
   static getMovies(params = { filters: { page: 1 } }) {
     const { page } = params.filters;
     const apiKey = apiConfig.apiKey;
-    console.log("API Key:", apiKey); //
-    const url = "https://api.themoviedb.org/3/discover/movie";
+    console.log("API Key:", apiKey);
+    const url = `https://api.themoviedb.org/3/discover/movie?page=${page}`;
 
     return fetch(url, {
       headers: {
