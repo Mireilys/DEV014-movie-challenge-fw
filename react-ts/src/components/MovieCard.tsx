@@ -11,6 +11,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const releaseYear = movie.release_date
     ? new Date(movie.release_date).getFullYear()
     : "Release year not available";
+  // Obtener el primer género o mostrar "No genre" si no hay géneros
+  const genre = movie.genres?.join(", ") || "Géneros no disponibles";
+
   return (
     <div data-testid="movie-card" className="movie-card">
       <div className="container-card">
@@ -21,6 +24,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
       <div className="movie-info">
         <h2 className="movie-title">{movie.title}</h2>
         <p className="movie-year">{releaseYear}</p>
+        <p className="movie-genre">{genre}</p>
       </div>
     </div>
   );

@@ -14,6 +14,12 @@ describe("formatMovie", () => {
       release_date: "2024-05-08",
       title: "Kingdom of the Planet of the Apes",
     };
+    // Simulación de genresMap para las pruebas
+    const genresMap = new Map([
+      [878, "Science Fiction"],
+      [12, "Adventure"],
+      [28, "Action"],
+    ]);
     const expectedMovie: Movie = {
       backdrop_path: "/fqv8v6AycXKsivp1T5yKtLbGXce.jpg",
       genre_ids: [878, 12, 28],
@@ -23,8 +29,9 @@ describe("formatMovie", () => {
       poster_path: "/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
       release_date: "2024-05-08",
       title: "Kingdom of the Planet of the Apes",
+      genres: ["Science Fiction", "Adventure", "Action"],
     };
-    const formattedMovie = formatMovie(apiMovieData);
+    const formattedMovie = formatMovie(apiMovieData, genresMap);
     expect(formattedMovie).toEqual(expectedMovie);
   });
 });

@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import "@testing-library/jest-dom"; // Asegúrate de importar jest-dom
+import "@testing-library/jest-dom";
 import MovieCard from "../components/MovieCard";
 import { Movie } from "../models/Movie";
 
@@ -14,6 +14,7 @@ describe("MovieCard", () => {
     poster_path: "/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
     release_date: "2024-05-08",
     title: "Kingdom of the Planet of the Apes",
+    genres: ["Science Fiction", "Adventure", "Action"],
   };
   it("debería renderizar correctamente con los datos de la película proporcionados", () => {
     const { getByAltText, getByTestId } = render(
@@ -26,6 +27,7 @@ describe("MovieCard", () => {
 
     expect(getByTestId("movie-card")).toHaveTextContent(mockMovie.title);
     expect(getByTestId("movie-card")).toHaveTextContent("2024");
+    expect(getByTestId("movie-card")).toHaveTextContent("Science Fiction");
   });
 
   it("debería manejar correctamente la ausencia de póster", () => {
@@ -35,5 +37,13 @@ describe("MovieCard", () => {
 
     const poster = getByAltText("Kingdom of the Planet of the Apes");
     expect(poster).toHaveAttribute("src", expectedPlaceholderUrl);
+  });
+  it("debería manejar correctamente la ausencia de géneros", () => {
+    const movieWithoutGenres: Movie = { ...mockMovie, genres: [] };
+    const { getByTestId } = render(<MovieCard movie={movieWithoutGenres} />);
+
+    expect(getByTestId("movie-card")).toHaveTextContent(
+      "Géneros no disponibles"
+    );
   });
 });

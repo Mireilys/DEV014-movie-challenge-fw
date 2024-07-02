@@ -12,12 +12,13 @@ const Home: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState<string | null>(null);
-
+  const [genres, setGenres] = useState<{ id: number; name: string }[]>([]); // Estado para almacenar los géneros de películas
   const [searchParams, setSearchParams] = useSearchParams(); //*Llamar al servicio getMovies cada vez que cambie el query param currentPage:Utiliza un efecto para observar los cambios en currentPage y llamar a fetchMovies con el nuevo valor.
   const currentPage = parseInt(searchParams.get("currentPage") || "1");
 
   useEffect(() => {
     fetchMovies(currentPage);
+    fetchMovieGenres(); // Llama a fetchMovieGenres al montar el componente
   }, [currentPage]);
 
   const fetchMovies = (page: number) => {
@@ -38,6 +39,16 @@ const Home: React.FC = () => {
           "Error al recuperar películas. Por favor, inténtelo de nuevo más tarde."
         );
         setIsLoading(false);
+      });
+  };
+  const fetchMovieGenres = () => {
+    APIService.getMovieGenres()
+      .then((genres) => {
+        setGenres(genres);
+        console.log("Movie Genres:", genres); // Mostrar los géneros de películas en la consola
+      })
+      .catch((error) => {
+        console.error("Error fetching movie genres:", error);
       });
   };
 
