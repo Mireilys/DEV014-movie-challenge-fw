@@ -1,4 +1,5 @@
 import React from "react";
+import "../App.css";
 
 interface Option {
   value: string;
@@ -10,6 +11,7 @@ interface ListOptionsProps {
   selectedOption: Option | null;
   onChange: (option: Option) => void;
   onClear: () => void;
+  label: string;
 }
 
 const ListOptions: React.FC<ListOptionsProps> = ({
@@ -17,34 +19,41 @@ const ListOptions: React.FC<ListOptionsProps> = ({
   selectedOption,
   onChange,
   onClear,
+  label, // Destructurar el prop `label`
 }) => {
   return (
     <div className="list-options">
-      <label htmlFor="list-options-select">Select an option:</label>
-      <select
-        id="list-options-select"
-        value={selectedOption?.value || ""}
-        onChange={(e) => {
-          const selected = options.find(
-            (option) => option.value === e.target.value
-          );
-          if (selected) {
-            onChange(selected);
-          }
-        }}
-      >
-        <option value="" disabled>
-          Select an option
-        </option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
+      <div className="list-options-container">
+        <select
+          id="list-options-select"
+          value={selectedOption?.value || ""}
+          onChange={(e) => {
+            const selected = options.find(
+              (option) => option.value === e.target.value
+            );
+            if (selected) {
+              onChange(selected);
+            }
+          }}
+          className="list-options-select"
+          aria-label={label} // o usa title={label}
+        >
+          <option value="" disabled>
+            {label}
           </option>
-        ))}
-      </select>
-      {selectedOption && <button onClick={onClear}>Clear Selection</button>}
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        {selectedOption && (
+          <button onClick={onClear} className="list-options-clear-button">
+            Limpiar
+          </button>
+        )}
+      </div>
     </div>
   );
 };
-
 export default ListOptions;

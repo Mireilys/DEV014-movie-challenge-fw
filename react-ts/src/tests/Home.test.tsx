@@ -129,6 +129,11 @@ import APIService from "../services/APIService";
 import { BrowserRouter } from "react-router-dom";
 
 jest.mock("../services/APIService"); // Mockear APIService
+jest.mock("../config/config", () => ({
+  apiConfig: {
+    apiKey: "your_mock_api_key",
+  },
+}));
 
 const mockedMovies = [
   {
@@ -136,12 +141,20 @@ const mockedMovies = [
     title: "Movie 1",
     overview: "Overview 1",
     poster_path: "/path/to/poster1.jpg",
+    backdrop_path: "/path/to/backdrop1.jpg",
+    genre_ids: [1, 2],
+    release_date: "2022-01-01",
+    genres: ["Action", "Comedy"],
   },
   {
     id: 2,
     title: "Movie 2",
     overview: "Overview 2",
     poster_path: "/path/to/poster2.jpg",
+    backdrop_path: "/path/to/backdrop2.jpg",
+    genre_ids: [1, 3],
+    release_date: "2022-02-01",
+    genres: ["Action", "Drama"],
   },
 ];
 
@@ -152,7 +165,6 @@ const mockedGenres = [
 
 describe("Home Component", () => {
   beforeEach(() => {
-    // Mockear getMovies y getMovieGenres con datos simulados
     const mockedGetMovies = APIService.getMovies as jest.MockedFunction<
       typeof APIService.getMovies
     >;
@@ -161,11 +173,16 @@ describe("Home Component", () => {
         typeof APIService.getMovieGenres
       >;
 
+    mockedGetMovies.mockResolvedValue({
+      movies: mockedMovies,
+      metaData: { pagination: { currentPage: 1, totalPages: 1 } },
+    });
+
     mockedGetMovieGenres.mockResolvedValue(mockedGenres);
   });
 
   afterEach(() => {
-    jest.clearAllMocks(); // Limpiar todos los mocks después de cada prueba
+    jest.clearAllMocks();
   });
 
   it("renders loading spinner while fetching movies", async () => {
@@ -183,8 +200,17 @@ describe("Home Component", () => {
 
     await waitFor(() => {
       mockedMovies.forEach((movie) => {
+        expect(
+          screen.getByTestId(`movie-card-${movie.id}`)
+        ).toBeInTheDocument();
         expect(screen.getByText(movie.title)).toBeInTheDocument();
         expect(screen.getByText(movie.overview)).toBeInTheDocument();
+        expect(
+          screen.getByText(`${new Date(movie.release_date).getFullYear()}`)
+        ).toBeInTheDocument();
+        movie.genres.forEach((genre) => {
+          expect(screen.getByText(genre)).toBeInTheDocument();
+        });
       });
     });
   });

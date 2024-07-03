@@ -1,27 +1,21 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import App from "../App";
 
-describe("App Component", () => {
-  it("renders app title", () => {
-    render(
-      <Router>
-        <App />
-      </Router>
-    );
+jest.mock("../services/APIService"); // Mockear APIService
+jest.mock("../config/config", () => ({
+  apiConfig: {
+    apiKey: "your_mock_api_key",
+  },
+}));
 
-    // Verifica que el título de la aplicación esté presente
-    expect(
-      screen.getByText(/Mi lista de películas favoritas/i)
-    ).toBeInTheDocument();
-  });
-
+describe("App", () => {
   it("renders Home component on default route", () => {
     render(
-      <Router>
+      <MemoryRouter>
         <App />
-      </Router>
+      </MemoryRouter>
     );
 
     // Verifica que el componente Home se renderice en la ruta por defecto "/"

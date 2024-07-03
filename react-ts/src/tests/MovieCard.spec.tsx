@@ -25,25 +25,31 @@ describe("MovieCard", () => {
     const poster = getByAltText(mockMovie.title);
     expect(poster).toHaveAttribute("src", expectedPosterUrl);
 
-    expect(getByTestId("movie-card")).toHaveTextContent(mockMovie.title);
-    expect(getByTestId("movie-card")).toHaveTextContent("2024");
-    expect(getByTestId("movie-card")).toHaveTextContent("Science Fiction");
+    expect(getByTestId(`movie-card-${mockMovie.id}`)).toHaveTextContent(
+      mockMovie.title
+    );
+    expect(getByTestId(`movie-card-${mockMovie.id}`)).toHaveTextContent("2024");
+    expect(getByTestId(`movie-card-${mockMovie.id}`)).toHaveTextContent(
+      "Science Fiction"
+    );
   });
 
   it("debería manejar correctamente la ausencia de póster", () => {
     const movieWithoutPoster: Movie = { ...mockMovie, poster_path: "" };
     const { getByAltText } = render(<MovieCard movie={movieWithoutPoster} />);
-    const expectedPlaceholderUrl = "https://image.tmdb.org/t/p/original";
+    const expectedPlaceholderUrl =
+      "https://via.placeholder.com/300x450?text=No+Poster+Available";
 
-    const poster = getByAltText("Kingdom of the Planet of the Apes");
+    const poster = getByAltText(movieWithoutPoster.title);
     expect(poster).toHaveAttribute("src", expectedPlaceholderUrl);
   });
+
   it("debería manejar correctamente la ausencia de géneros", () => {
     const movieWithoutGenres: Movie = { ...mockMovie, genres: [] };
     const { getByTestId } = render(<MovieCard movie={movieWithoutGenres} />);
 
-    expect(getByTestId("movie-card")).toHaveTextContent(
-      "Géneros no disponibles"
-    );
+    expect(
+      getByTestId(`movie-card-${movieWithoutGenres.id}`)
+    ).toHaveTextContent("Géneros no disponibles");
   });
 });

@@ -6,6 +6,13 @@ import { Movie } from "../models/Movie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "./Pagination";
+import ListOptions from "../components/ListOptions";
+import { formatGenresToOptions } from "../utils/transformers";
+
+interface Option {
+  value: string;
+  label: string;
+}
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,19 +21,27 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [genres, setGenres] = useState<{ id: number; name: string }[]>([]); // Estado para almacenar los géneros de películas
   const [searchParams, setSearchParams] = useSearchParams(); //*Llamar al servicio getMovies cada vez que cambie el query param currentPage:Utiliza un efecto para observar los cambios en currentPage y llamar a fetchMovies con el nuevo valor.
-  const currentPage = parseInt(searchParams.get("currentPage") || "1");
+  const currentPage = parseInt(searchParams.get("currentPage") || "1", 10);
+  const selectedGenreId = searchParams.get("genreId") ?? null;
+  const selectedSortBy = searchParams.get("sortBy") ?? null;
 
   useEffect(() => {
     fetchMovies(currentPage);
     fetchMovieGenres(); // Llama a fetchMovieGenres al montar el componente
-  }, [currentPage]);
+  }, [currentPage, selectedGenreId, selectedSortBy]);
 
   const fetchMovies = (page: number) => {
     console.log("Fetching movies for page:", page);
     setIsLoading(true);
     setError(null);
 
-    APIService.getMovies({ filters: { page } })
+    const filters = {
+      page,
+      genreId: selectedGenreId ? parseInt(selectedGenreId, 10) : null,
+      sortBy: selectedSortBy,
+    };
+
+    APIService.getMovies({ filters })
       .then((data) => {
         console.log("Movies fetched:", data);
         setMovies(data.movies);
@@ -53,12 +68,29 @@ const Home: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-    setSearchParams({ currentPage: page.toString() });
+    setSearchParams((prevParams) => {
+      prevParams.set("currentPage", page.toString());
+      return prevParams;
+    });
+  };
+
+  const handleGenreChange = (option: Option) => {
+    setSearchParams((prevParams) => {
+      prevParams.set("genreId", option.value);
+      return prevParams;
+    });
+  };
+
+  const handleSortChange = (option: Option) => {
+    setSearchParams((prevParams) => {
+      prevParams.set("sortBy", option.value);
+      return prevParams;
+    });
   };
 
   if (isLoading) {
     return (
-      <div className="loading-container">
+      <div className="loading-container" data-testid="loading-spinner">
         <FontAwesomeIcon icon={faSpinner} spin size="3x" />
         <p>Loading...</p>
       </div>
@@ -67,14 +99,66 @@ const Home: React.FC = () => {
 
   if (error) {
     return (
-      <div className="error-container">
+      <div className="error-container" data-testid="error-message">
         <div className="error-message">{error}</div>
       </div>
     );
   }
 
+  const genreOptions = formatGenresToOptions(genres);
+  const sortOptions = [
+    { value: "popularity.desc", label: "Popularity Descending" },
+    { value: "popularity.asc", label: "Popularity Ascending" },
+    // Agrega más opciones de ordenamiento según sea necesario
+  ];
+
   return (
-    <div className="home-container">
+    <div className="home-container" data-testid="movie-list-container">
+      <div className="home-section">
+        <div className="genre-options">
+          <ListOptions
+            options={genreOptions}
+            selectedOption={
+              selectedGenreId
+                ? {
+                    value: selectedGenreId.toString(),
+                    label: selectedGenreId.toString(),
+                  }
+                : null
+            }
+            onChange={handleGenreChange}
+            onClear={() =>
+              setSearchParams((prevParams) => {
+                prevParams.delete("genreId");
+                return prevParams;
+              })
+            }
+            label="Filtrar por género" // Pasar el texto deseado como `label`
+          />
+        </div>
+        <div className="sort-options">
+          <ListOptions
+            options={sortOptions}
+            selectedOption={
+              selectedSortBy
+                ? {
+                    value: selectedSortBy.toString(),
+                    label: selectedSortBy.toString(),
+                  }
+                : null
+            }
+            onChange={handleSortChange}
+            onClear={() =>
+              setSearchParams((prevParams) => {
+                prevParams.delete("sortBy");
+                return prevParams;
+              })
+            }
+            label="Ordenar" // Pasar el texto deseado como `label`
+          />
+        </div>
+      </div>
+
       <MovieList movies={movies} />
       <Pagination
         currentPage={currentPage}

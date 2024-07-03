@@ -7,7 +7,9 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
-  const imageUrl = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
+  const imageUrl = movie.poster_path
+    ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+    : "https://via.placeholder.com/300x450?text=No+Poster+Available";
   const releaseYear = movie.release_date
     ? new Date(movie.release_date).getFullYear()
     : "Release year not available";
@@ -15,7 +17,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   const genre = movie.genres?.join(", ") || "Géneros no disponibles";
 
   return (
-    <div data-testid="movie-card" className="movie-card">
+    <div data-testid={`movie-card-${movie.id}`} className="movie-card">
       <div className="container-card">
         <div className="imange-container">
           <img src={imageUrl} alt={movie.title} className="movie-poster" />

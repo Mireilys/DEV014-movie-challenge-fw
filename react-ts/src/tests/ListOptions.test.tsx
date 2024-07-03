@@ -17,6 +17,7 @@ describe("ListOptions", () => {
         selectedOption={null}
         onChange={() => {}}
         onClear={() => {}}
+        label="Seleccione una opción"
       />
     );
 
@@ -33,6 +34,7 @@ describe("ListOptions", () => {
         selectedOption={null}
         onChange={onChangeMock}
         onClear={() => {}}
+        label="Seleccione una opción"
       />
     );
 
@@ -49,10 +51,11 @@ describe("ListOptions", () => {
         selectedOption={options[0]}
         onChange={() => {}}
         onClear={onClearMock}
+        label="Seleccione una opción"
       />
     );
 
-    fireEvent.click(getByText("Clear Selection"));
+    fireEvent.click(getByText("Limpiar"));
 
     expect(onClearMock).toHaveBeenCalled();
   });

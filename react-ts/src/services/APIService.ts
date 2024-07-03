@@ -1,86 +1,3 @@
-// import {
-//   ApiMovieData,
-//   formatMovie,
-//   formatGenresToMap,
-// } from "../utils/transformers";
-// import Movie from "../models/Movie";
-// import { apiConfig } from "../config/config";
-
-// class APIService {
-//   static getMovies(params = { filters: { page: 1 } }) {
-//     const { page } = params.filters;
-//     const apiKey = apiConfig.apiKey;
-//     console.log("API Key:", apiKey);
-//     const url = `https://api.themoviedb.org/3/discover/movie?page=${page}`;
-
-//     return fetch(url, {
-//       headers: {
-//         Authorization: `Bearer ${apiKey}`,
-//       },
-//     })
-//       .then((response) => {
-//         if (!response.ok) {
-//           throw new Error("Network response was not ok");
-//         }
-//         return response.json();
-//       })
-//       .then((data) => {
-//         console.log("Received data from API:", data);
-//         // Obtener el Map de géneros
-//         return APIService.getMovieGenres().then((genres) => {
-//           const genresMap = formatGenresToMap(genres);
-//           // Mapear los datos de películas a objetos Movie usando formatMovie
-//           const movies = data.results.map((apiMovieData: ApiMovieData) =>
-//             formatMovie(apiMovieData, genresMap)
-//           );
-
-//           const pagination = {
-//             currentPage: data.page,
-//             totalPages: data.total_pages,
-//           };
-//           return { metaData: { pagination }, movies };
-//         });
-//       })
-//       .catch((error) => {
-//         console.error(
-//           "There has been a problem with your fetch operation:",
-//           error
-//         );
-//         throw error;
-//       });
-//   }
-
-//   static getMovieGenres() {
-//     const apiKey = apiConfig.apiKey;
-//     const url = `https://api.themoviedb.org/3/genre/movie/list`;
-
-//     return fetch(url, {
-//       headers: {
-//         Authorization: `Bearer ${apiKey}`,
-//       },
-//     })
-//       .then((response) => {
-//         if (!response.ok) {
-//           throw new Error("Network response was not ok");
-//         }
-//         return response.json();
-//       })
-//       .then((data) => {
-//         console.log("Received data from API:", data);
-//         return data.genres; // Devuelve la lista de géneros
-//       })
-//       .catch((error) => {
-//         console.error(
-//           "There has been a problem with your fetch operation:",
-//           error
-//         );
-//         throw error;
-//       });
-//   }
-// }
-
-// export default APIService;
-
 import {
   formatMovie,
   formatGenresToMap,
@@ -90,11 +7,27 @@ import { Movie } from "../models/Movie";
 import { apiConfig } from "../config/config";
 
 class APIService {
-  static getMovies(params = { filters: { page: 1 } }) {
-    const { page } = params.filters;
+  static getMovies(
+    params = {
+      filters: {
+        page: 1,
+        genreId: null as number | null,
+        sortBy: null as string | null,
+      },
+    }
+  ) {
+    const { page, genreId, sortBy } = params.filters;
     const apiKey = apiConfig.apiKey;
     console.log("API Key:", apiKey);
-    const url = `https://api.themoviedb.org/3/discover/movie?page=${page}`;
+    let url = `https://api.themoviedb.org/3/discover/movie?page=${page}`;
+
+    // se agrega filtrado por género si se proporciona genreId
+    if (genreId !== null) {
+      url += `&with_genres=${genreId}`;
+    }
+    if (sortBy !== null) {
+      url += `&sort_by=${sortBy}`;
+    }
 
     return fetch(url, {
       headers: {

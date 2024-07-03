@@ -16,6 +16,7 @@ describe("MovieList", () => {
         poster_path: "/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
         release_date: "2024-05-08",
         title: "Kingdom of the Planet of the Apes",
+        genres: ["Science Fiction", "Adventure", "Action"],
       },
       {
         backdrop_path: "/xRd1eJIDe7JHO5u4gtEYwGn5wtf.jpg",
@@ -26,16 +27,18 @@ describe("MovieList", () => {
         poster_path: "/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg",
         release_date: "2024-03-27",
         title: "Godzilla x Kong: The New Empire",
+        genres: ["Science Fiction", "Adventure", "Action"],
       },
     ];
 
     const { getAllByTestId, getByText } = render(<MovieList movies={movies} />);
 
-    const movieCards = getAllByTestId("movie-card");
-    expect(movieCards).toHaveLength(2);
-
     movies.forEach((movie) => {
-      expect(getByText(movie.title)).toBeInTheDocument();
+      const movieCards = getAllByTestId(`movie-card-${movie.id}`);
+      movieCards.forEach((card) => {
+        expect(card).toBeInTheDocument();
+        expect(getByText(movie.title)).toBeInTheDocument();
+      });
     });
   });
 

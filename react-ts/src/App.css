@@ -11,7 +11,7 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   width: 100%; /* Asegura que el ancho no exceda el tamaño de la pantalla */
-  height: 360%;
+  height: 410%;
   min-height: 100vh;
   background: linear-gradient(45deg, #0021ba, #eaeaea);
   box-sizing: border-box;
@@ -27,7 +27,7 @@ body {
 .movie-card {
   display: grid;
   grid-template-rows: 1fr auto;
-  height: 380px; /*buscar mia*/
+  height: 415px; /*buscar mia*/
   width: 350px;
 }
 
@@ -45,7 +45,7 @@ body {
   object-fit: cover;
 }
 .movie-info {
-  padding: 16px;
+  padding: 10px;
   margin: 90px 100px 100px 0px;
 }
 .movie-title {
@@ -60,9 +60,9 @@ body {
   margin: 0;
 }
 .movie-genre{
-  font-size: 18px;
+  font-size: 15px;
   color: white;
-  margin: 0;
+  margin: 0px 0px 5px 0px;
 }
 
 /*Estilos moviList*/
@@ -121,13 +121,6 @@ body {
 }
 /* Pagination.css */
 .pagination {
-  /* display: grid;
-  grid-template-columns: repeat(7, minmax(30px, auto));
-  gap: 0.5rem;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem 0;
-  color: black; */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(30px, auto));
   gap: 0.5rem;
@@ -162,6 +155,55 @@ body {
   background-color: #0056b3;
 }
 
+.home-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
+  gap: 16px; /* Espacio entre columnas */
+  margin: 20px 650px 20px 50px; /* Espacio inferior entre la sección de opciones y MovieList */
+}
+.genre-options,
+.sort-options {
+  flex: 1;
+  margin: 0 8px; /* Ajusta este valor para reducir el espacio entre los selectores */
+}
+
+.list-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 25px;
+  margin-bottom: 16px;
+}
+
+#list-options-select{
+  border-radius: 25px;
+  padding: 8px 16px;
+  width: 200px;
+  border: 2px solid black;
+  color: black;
+  font-weight: 20; /* No es necesario especificar 'px' para 'font-weight' */
+  font-size: 16px;
+}
+
+.clear-selection{
+  /* border-radius: 25px;
+  margin-bottom: 16px;
+  border-radius: 25px;
+  padding: 8px 16px;
+  width: 200px; */
+  border-radius: 25px;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}
+.list-options-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre el selector y el botón */
+}
+
+
+
 /* .home-container {
   max-width: 800px;
   margin: 0 auto;
@@ -189,8 +231,3 @@ body {
   padding: 5px;
   font-size: 14px;
 }
-
-.filter input[type="checkbox"] {
-  margin-right: 5px;
-  transform: scale(1.2); /* Aumenta el tamaño del checkbox */
-} */

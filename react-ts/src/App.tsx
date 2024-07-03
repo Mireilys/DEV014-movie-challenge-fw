@@ -10,7 +10,6 @@ const App: React.FC = () => {
         <div className="title-container">
           <h1 className="title">Mi lista de películas favoritas</h1>
         </div>
-        <div className="selectores-options"></div>
       </div>
       <div className="filter-movie">
         <Routes>
