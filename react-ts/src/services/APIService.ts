@@ -8,20 +8,22 @@ import { apiConfig } from "../config/config";
 
 class APIService {
   static getMovies(
-    params = {
+    params: {
+      filters: { page: number; genreId: number | null; sortBy: string | null };
+    } = {
       filters: {
         page: 1,
-        genreId: null as number | null,
-        sortBy: null as string | null,
+        genreId: null,
+        sortBy: null,
       },
     }
   ) {
     const { page, genreId, sortBy } = params.filters;
     const apiKey = apiConfig.apiKey;
     console.log("API Key:", apiKey);
-    let url = `https://api.themoviedb.org/3/discover/movie?page=${page}`;
+    let url = `https://api.themoviedb.org/3/discover/movie?page=${page}&language=es-ES`;
 
-    // se agrega filtrado por género si se proporciona genreId
+    // Agregar filtro por género si se proporciona genreId
     if (genreId !== null) {
       url += `&with_genres=${genreId}`;
     }
@@ -75,7 +77,7 @@ class APIService {
 
   static getMovieGenres(): Promise<{ id: number; name: string }[]> {
     const apiKey = apiConfig.apiKey;
-    const url = `https://api.themoviedb.org/3/genre/movie/list`;
+    const url = `https://api.themoviedb.org/3/genre/movie/list?language=es-ES`;
 
     return fetch(url, {
       headers: {
@@ -101,6 +103,46 @@ class APIService {
           "There has been a problem with your fetch operation:",
           error
         );
+        throw error;
+      });
+  }
+  static getMovieDetail(id: number): Promise<Movie> {
+    const apiKey = apiConfig.apiKey;
+    console.log("API Key detail:", apiKey);
+    const url = `https://api.themoviedb.org/3/movie/${id}?language=es-ES`;
+
+    console.log("Verifying URL:", url);
+
+    return fetch(url, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data: ApiMovieData) => {
+        console.log("Received movie data:", data);
+
+        // Obtener los géneros y crear un mapa de géneros
+        return this.getMovieGenres().then((genres) => {
+          if (!genres || genres.length === 0) {
+            console.warn("No genres data received from API");
+            genres = [];
+          }
+          const genresMap = formatGenresToMap(genres);
+
+          // Transformar datos de la película al modelo de negocio Movie
+          const movie = formatMovie(data, genresMap);
+          console.log("Formatted movie:", movie);
+          return movie;
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching movie:", error);
         throw error;
       });
   }

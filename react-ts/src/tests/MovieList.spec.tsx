@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import "@testing-library/jest-dom"; // Asegúrate de importar jest-dom
 import MovieList from "../components/MovieList";
 import { Movie } from "../models/Movie";
@@ -17,6 +18,7 @@ describe("MovieList", () => {
         release_date: "2024-05-08",
         title: "Kingdom of the Planet of the Apes",
         genres: ["Science Fiction", "Adventure", "Action"],
+        vote_average: 8.5,
       },
       {
         backdrop_path: "/xRd1eJIDe7JHO5u4gtEYwGn5wtf.jpg",
@@ -28,10 +30,15 @@ describe("MovieList", () => {
         release_date: "2024-03-27",
         title: "Godzilla x Kong: The New Empire",
         genres: ["Science Fiction", "Adventure", "Action"],
+        vote_average: 8.9,
       },
     ];
 
-    const { getAllByTestId, getByText } = render(<MovieList movies={movies} />);
+    const { getAllByTestId, getByText } = render(
+      <MemoryRouter>
+        <MovieList movies={movies} />
+      </MemoryRouter>
+    );
 
     movies.forEach((movie) => {
       const movieCards = getAllByTestId(`movie-card-${movie.id}`);
@@ -45,7 +52,11 @@ describe("MovieList", () => {
   it("renders empty movie list correctly", () => {
     const movies: Movie[] = [];
 
-    const { queryByTestId } = render(<MovieList movies={movies} />);
+    const { queryByTestId } = render(
+      <MemoryRouter>
+        <MovieList movies={movies} />
+      </MemoryRouter>
+    );
 
     const movieCards = queryByTestId("movie-card");
     expect(movieCards).toBeNull();

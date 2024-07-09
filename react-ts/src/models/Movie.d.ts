@@ -7,4 +7,5 @@ export type Movie = {
   release_date: string;
   title: string;
   genres: Array<string>;
+  vote_average: number;
 };

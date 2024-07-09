@@ -1,27 +1,3 @@
-// import { Movie } from "../models/Movie";
-
-// export interface ApiMovieData {
-//   backdrop_path: string;
-//   genre_ids: number[];
-//   id: number;
-//   overview: string;
-//   poster_path: string;
-//   release_date: string;
-//   title: string;
-// }
-// export function formatMovie(apiMovieData: ApiMovieData): Movie {
-//   // Transformar datos de la película de la API al modelo de negocio Movie
-//   const formattedMovie: Movie = {
-//     backdrop_path: apiMovieData.backdrop_path,
-//     genre_ids: apiMovieData.genre_ids,
-//     id: apiMovieData.id,
-//     overview: apiMovieData.overview,
-//     poster_path: apiMovieData.poster_path,
-//     release_date: apiMovieData.release_date,
-//     title: apiMovieData.title,
-//   };
-//   return formattedMovie;
-// }
 import { Movie } from "../models/Movie";
 
 // Interfaz para los datos de película provenientes de la API
@@ -30,10 +6,11 @@ export interface ApiMovieData {
   genre_ids: number[];
   id: number;
   overview: string;
-  poster_path: string;
+  poster_path: string | null;
   release_date: string;
   title: string;
   genres?: string[];
+  vote_average: number;
 }
 
 // Función para formatear los datos de la película de la API al modelo de negocio Movie
@@ -56,10 +33,11 @@ export function formatMovie(
     genre_ids: apiMovieData.genre_ids || [],
     id: apiMovieData.id,
     overview: apiMovieData.overview,
-    poster_path: apiMovieData.poster_path,
+    poster_path: apiMovieData.poster_path || "",
     release_date: apiMovieData.release_date,
     title: apiMovieData.title,
     genres: filteredGenres,
+    vote_average: apiMovieData.vote_average || 0,
   };
 
   return formattedMovie;

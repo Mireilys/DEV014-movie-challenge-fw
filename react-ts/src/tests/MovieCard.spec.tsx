@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { MemoryRouter } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
 import { Movie } from "../models/Movie";
 
@@ -15,10 +16,16 @@ describe("MovieCard", () => {
     release_date: "2024-05-08",
     title: "Kingdom of the Planet of the Apes",
     genres: ["Science Fiction", "Adventure", "Action"],
+    vote_average: 8.5,
   };
+
   it("debería renderizar correctamente con los datos de la película proporcionados", () => {
     const { getByAltText, getByTestId } = render(
-      <MovieCard movie={mockMovie} />
+      <MemoryRouter>
+        {" "}
+        {/* Envuelve en MemoryRouter */}
+        <MovieCard movie={mockMovie} />
+      </MemoryRouter>
     );
     const expectedPosterUrl = `https://image.tmdb.org/t/p/original${mockMovie.poster_path}`;
 
@@ -30,23 +37,38 @@ describe("MovieCard", () => {
     );
     expect(getByTestId(`movie-card-${mockMovie.id}`)).toHaveTextContent("2024");
     expect(getByTestId(`movie-card-${mockMovie.id}`)).toHaveTextContent(
-      "Science Fiction"
+      "Science Fiction, Adventure, Action"
     );
   });
 
   it("debería manejar correctamente la ausencia de póster", () => {
-    const movieWithoutPoster: Movie = { ...mockMovie, poster_path: "" };
-    const { getByAltText } = render(<MovieCard movie={movieWithoutPoster} />);
+    const movieWithoutPoster: Movie = {
+      ...mockMovie,
+      poster_path: null as any,
+    };
+    const { getByAltText } = render(
+      <MemoryRouter>
+        {" "}
+        {/* Envuelve en MemoryRouter */}
+        <MovieCard movie={movieWithoutPoster} />
+      </MemoryRouter>
+    );
     const expectedPlaceholderUrl =
       "https://via.placeholder.com/300x450?text=No+Poster+Available";
 
-    const poster = getByAltText(movieWithoutPoster.title);
+    const poster = getByAltText(mockMovie.title);
     expect(poster).toHaveAttribute("src", expectedPlaceholderUrl);
   });
 
   it("debería manejar correctamente la ausencia de géneros", () => {
     const movieWithoutGenres: Movie = { ...mockMovie, genres: [] };
-    const { getByTestId } = render(<MovieCard movie={movieWithoutGenres} />);
+    const { getByTestId } = render(
+      <MemoryRouter>
+        {" "}
+        {/* Envuelve en MemoryRouter */}
+        <MovieCard movie={movieWithoutGenres} />
+      </MemoryRouter>
+    );
 
     expect(
       getByTestId(`movie-card-${movieWithoutGenres.id}`)

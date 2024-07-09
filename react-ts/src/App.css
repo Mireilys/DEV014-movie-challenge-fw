@@ -30,6 +30,9 @@ body {
   height: 415px; /*buscar mia*/
   width: 350px;
 }
+.clickable {
+  cursor: pointer;
+}
 
 .container-card {
   padding: 0px;
@@ -53,16 +56,24 @@ body {
   font-weight: bold;
   color: white;
   margin: 0px;
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .movie-year {
   font-size: 18px;
   color: white;
   margin: 0;
 }
-.movie-genre{
+.movie-genre {
   font-size: 15px;
   color: white;
   margin: 0px 0px 5px 0px;
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /*Estilos moviList*/
@@ -175,7 +186,7 @@ body {
   margin-bottom: 16px;
 }
 
-#list-options-select{
+#list-options-select {
   border-radius: 25px;
   padding: 8px 16px;
   width: 200px;
@@ -185,7 +196,7 @@ body {
   font-size: 16px;
 }
 
-.clear-selection{
+.clear-selection {
   /* border-radius: 25px;
   margin-bottom: 16px;
   border-radius: 25px;
@@ -202,32 +213,58 @@ body {
   gap: 8px; /* Espacio entre el selector y el botón */
 }
 
+/*Movie Detail*/
 
-
-/* .home-container {
-  max-width: 800px;
-  margin: 0 auto;
+.movie-detail-container {
+  max-width: 800px; /* Ajusta el ancho máximo según tu diseño */
+  margin: 50px auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 300px 1fr; /* Columna fija para la imagen, columna flexible para el contenido */
+  grid-gap: 20px; /* Espacio entre las columnas */
+  position: relative; /* Espacio entre las columnas */
 }
 
-.filters-container {
+.movie-detail-poster {
+  width: 100%; /* La imagen ocupa todo el espacio disponible en su contenedor */
+  max-width: 300px; /* Ancho máximo para la imagen */
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.movie-detail-content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+}
+
+/* .movie-detail-content button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
   margin-bottom: 20px;
+} */
+.back-button {
+  position: absolute; /* Posiciona el botón de volver atrás de forma absoluta */
+  bottom: 510px; /* Ajusta la posición vertical sobre el contenedor principal */
+  left: 0px; /* Ajusta la posición horizontal sobre el contenedor principal */
+  background-color: transparent; /* Fondo del botón */
+  color: black; /* Color del texto del botón */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+  z-index: 1; /* Asegura que el botón esté sobre el contenido */
 }
-
-.filter {
-  margin-bottom: 10px;
-}
-
-.filter label {
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-.filter select {
-  padding: 5px;
-  font-size: 14px;
+.back-button:hover {
+  background-color: #0056b3;
+  color: white; /* Color de fondo al pasar el mouse */
 }

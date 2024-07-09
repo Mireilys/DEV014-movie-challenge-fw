@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Movie } from "../models/Movie";
 import "../App.css";
 
@@ -7,6 +8,7 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+  const navigate = useNavigate(); // Hook para navegación
   const imageUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
     : "https://via.placeholder.com/300x450?text=No+Poster+Available";
@@ -15,9 +17,16 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     : "Release year not available";
   // Obtener el primer género o mostrar "No genre" si no hay géneros
   const genre = movie.genres?.join(", ") || "Géneros no disponibles";
+  const handleCardClick = () => {
+    navigate(`/movie/${movie.id}`);
+  };
 
   return (
-    <div data-testid={`movie-card-${movie.id}`} className="movie-card">
+    <div
+      data-testid={`movie-card-${movie.id}`}
+      className="movie-card"
+      onClick={handleCardClick}
+    >
       <div className="container-card">
         <div className="imange-container">
           <img src={imageUrl} alt={movie.title} className="movie-poster" />

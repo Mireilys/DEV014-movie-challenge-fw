@@ -69,25 +69,39 @@ const Home: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setSearchParams((prevParams) => {
+      console.log("que recibe", setSearchParams);
       prevParams.set("currentPage", page.toString());
       return prevParams;
     });
   };
 
-  const handleGenreChange = (option: Option) => {
+  const handleGenreChange = (option: Option | null) => {
     setSearchParams((prevParams) => {
-      prevParams.set("genreId", option.value);
-      return prevParams;
+      const newParams = new URLSearchParams(prevParams.toString());
+
+      if (option) {
+        newParams.set("genreId", option.value);
+      } else {
+        newParams.delete("genreId");
+      }
+
+      return newParams;
     });
   };
 
-  const handleSortChange = (option: Option) => {
+  const handleSortChange = (option: Option | null) => {
     setSearchParams((prevParams) => {
-      prevParams.set("sortBy", option.value);
-      return prevParams;
+      const newParams = new URLSearchParams(prevParams.toString());
+
+      if (option) {
+        newParams.set("sortBy", option.value);
+      } else {
+        newParams.delete("sortBy");
+      }
+
+      return newParams;
     });
   };
-
   if (isLoading) {
     return (
       <div className="loading-container" data-testid="loading-spinner">
@@ -114,6 +128,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-container" data-testid="movie-list-container">
+      <h1 className="title">Mi lista de películas favoritas</h1>
       <div className="home-section">
         <div className="genre-options">
           <ListOptions

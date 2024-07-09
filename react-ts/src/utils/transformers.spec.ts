@@ -13,6 +13,7 @@ describe("formatMovie", () => {
       poster_path: "/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
       release_date: "2024-05-08",
       title: "Kingdom of the Planet of the Apes",
+      vote_average: 8.5,
     };
     // Simulación de genresMap para las pruebas
     const genresMap = new Map([
@@ -30,6 +31,7 @@ describe("formatMovie", () => {
       release_date: "2024-05-08",
       title: "Kingdom of the Planet of the Apes",
       genres: ["Science Fiction", "Adventure", "Action"],
+      vote_average: 8.5,
     };
     const formattedMovie = formatMovie(apiMovieData, genresMap);
     expect(formattedMovie).toEqual(expectedMovie);

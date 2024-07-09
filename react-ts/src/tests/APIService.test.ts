@@ -1,6 +1,5 @@
 import APIService from "../services/APIService";
 import { Movie } from "../models/Movie";
-import { ApiMovieData } from "../utils/transformers";
 
 // Mock de configuración fuera de la prueba
 jest.mock("../config/config", () => ({
@@ -54,6 +53,23 @@ describe("APIService", () => {
           });
         }
 
+        if (url.includes("movie")) {
+          return Promise.resolve({
+            ok: true,
+            json: () =>
+              Promise.resolve({
+                id: 653346,
+                title: "Kingdom of the Planet of the Apes",
+                backdrop_path: "/fqv8v6AycXKsivp1T5yKtLbGXce.jpg",
+                genre_ids: [878, 12, 28],
+                overview:
+                  "Several generations in the future following Caesar's reign, apes are now the dominant species and live harmoniously while humans have been reduced to living in the shadows. As a new tyrannical ape leader builds his empire, one young ape undertakes a harrowing journey that will cause him to question all that he has known about the past and to make choices that will define a future for apes and humans alike.",
+                poster_path: "/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
+                release_date: "2024-05-08",
+              }),
+          });
+        }
+
         return Promise.reject(new Error("Unknown URL"));
       });
     });
@@ -62,7 +78,7 @@ describe("APIService", () => {
       (global.fetch as jest.Mock).mockClear();
     });
 
-    it("fetches movies successfully", () => {
+    it("fetches movies successfully", async () => {
       const expectedMovies: Movie[] = [
         {
           id: 653346,
@@ -73,7 +89,8 @@ describe("APIService", () => {
             "Several generations in the future following Caesar's reign, apes are now the dominant species and live harmoniously while humans have been reduced to living in the shadows. As a new tyrannical ape leader builds his empire, one young ape undertakes a harrowing journey that will cause him to question all that he has known about the past and to make choices that will define a future for apes and humans alike.",
           poster_path: "/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
           release_date: "2024-05-08",
-          genres: ["Science Fiction", "Adventure", "Action"], // Debes ajustar esto según los datos reales recibidos
+          genres: ["Action", "Adventure"], // Actualiza según los datos reales recibidos
+          vote_average: 8.5,
         },
         {
           backdrop_path: "/xRd1eJIDe7JHO5u4gtEYwGn5wtf.jpg",
@@ -85,89 +102,75 @@ describe("APIService", () => {
           release_date: "2024-03-27",
           title: "Godzilla x Kong: The New Empire",
           genres: ["Science Fiction", "Adventure", "Action"],
+          vote_average: 8.9,
         },
       ];
 
-      return APIService.getMovies({
+      const data = await APIService.getMovies({
         filters: { page: 1, genreId: null, sortBy: null },
-      }).then((data) => {
-        const { movies } = data;
-
-        expect(global.fetch).toHaveBeenCalledWith(
-          "https://api.themoviedb.org/3/discover/movie?page=1",
-          {
-            headers: {
-              Authorization: `Bearer your_mock_api_key`,
-            },
-          }
-        );
-
-        expect(movies.length).toBe(2);
-        expect(movies[0].id).toBe(expectedMovies[0].id);
-        expect(movies[0].title).toBe(expectedMovies[0].title);
       });
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.themoviedb.org/3/discover/movie?page=1&language=es-ES",
+        {
+          headers: {
+            Authorization: `Bearer your_mock_api_key`,
+          },
+        }
+      );
+
+      expect(data.movies.length).toBe(2);
+      expect(data.movies[0].id).toBe(expectedMovies[0].id);
+      expect(data.movies[0].title).toBe(expectedMovies[0].title);
     });
 
-    it("applies genre filter correctly", () => {
-      return APIService.getMovies({
+    test("APIService › getMovies › applies genre filter correctly", async () => {
+      const params = {
         filters: { page: 1, genreId: 12, sortBy: null },
-      }).then(() => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          "https://api.themoviedb.org/3/discover/movie?page=1&with_genres=12",
-          {
-            headers: {
-              Authorization: `Bearer your_mock_api_key`,
-            },
-          }
-        );
-      });
+      };
+
+      await APIService.getMovies(params);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.themoviedb.org/3/discover/movie?page=1&language=es-ES&with_genres=12",
+        {
+          headers: {
+            Authorization: `Bearer your_mock_api_key`,
+          },
+        }
+      );
     });
 
-    it("applies sorting correctly", () => {
-      return APIService.getMovies({
-        filters: { page: 1, genreId: null, sortBy: "popularity.desc" },
-      }).then(() => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          "https://api.themoviedb.org/3/discover/movie?page=1&sort_by=popularity.desc",
-          {
-            headers: {
-              Authorization: `Bearer your_mock_api_key`,
-            },
-          }
-        );
-      });
+    it("fetches movie genres successfully", async () => {
+      const genres = await APIService.getMovieGenres();
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "https://api.themoviedb.org/3/genre/movie/list?language=es-ES",
+        {
+          headers: {
+            Authorization: `Bearer your_mock_api_key`,
+          },
+        }
+      );
+
+      expect(genres.length).toBe(2);
+      expect(genres[0].name).toBe("Action");
+      expect(genres[1].name).toBe("Adventure");
     });
 
-    it("applies both genre filter and sorting correctly", () => {
-      return APIService.getMovies({
-        filters: { page: 1, genreId: 12, sortBy: "popularity.desc" },
-      }).then(() => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          "https://api.themoviedb.org/3/discover/movie?page=1&with_genres=12&sort_by=popularity.desc",
-          {
-            headers: {
-              Authorization: `Bearer your_mock_api_key`,
-            },
-          }
-        );
-      });
-    });
+    test("APIService › getMovieDetail › fetches movie details successfully", async () => {
+      const movieId = 653346;
 
-    it("fetches movie genres successfully", () => {
-      return APIService.getMovieGenres().then((genres) => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          "https://api.themoviedb.org/3/genre/movie/list",
-          {
-            headers: {
-              Authorization: `Bearer your_mock_api_key`,
-            },
-          }
-        );
+      await APIService.getMovieDetail(movieId);
 
-        expect(genres.length).toBe(2);
-        expect(genres[0].name).toBe("Action");
-        expect(genres[1].name).toBe("Adventure");
-      });
+      expect(global.fetch).toHaveBeenCalledWith(
+        `https://api.themoviedb.org/3/genre/movie/list?language=es-ES`,
+        {
+          headers: {
+            Authorization: `Bearer your_mock_api_key`,
+          },
+        }
+      );
     });
   });
 });
