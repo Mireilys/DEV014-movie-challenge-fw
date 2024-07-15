@@ -7,10 +7,6 @@
   margin: 20px 650px 20px 50px;
 }
 .title {
-  /* font-weight: 200;
-  font-size: 45px;
-  
-  text-align: center; */
   font-family: "Bangers", cursive; /* Cambia a una fuente más llamativa */
   font-size: 3em; /* Tamaño grande para destacar */
   color: #f0cc3d;
@@ -43,4 +39,15 @@
   align-items: center;
   justify-content: center;
   height: 190vh;
+}
+
+@media (max-width: 768px) {
+  .home-section {
+    grid-template-columns: 1fr; /* Cambiamos a una columna para dispositivos móviles */
+    margin: 20px 20px; /* Margen más pequeño */
+  }
+
+  .title {
+    font-size: 2em; /* Reducimos el tamaño del título para dispositivos móviles */
+  }
 }

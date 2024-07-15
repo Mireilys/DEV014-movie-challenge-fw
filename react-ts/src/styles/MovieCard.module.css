@@ -49,3 +49,25 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@media (max-width: 768px) {
+  .movie-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    justify-items: center;
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  .movie-card {
+    width: 90%;
+    max-width: 350px;
+    margin: 20px auto;
+  }
+
+  .movie-info {
+    padding: 10px;
+    text-align: center;
+  }
+}

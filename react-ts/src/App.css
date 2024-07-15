@@ -23,3 +23,15 @@ body {
   padding: 20px;
   box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px; /* Reducimos el padding para dispositivos móviles */
+  }
+}
+
+@media (max-width: 768px) {
+  #root {
+    height: auto; /* Ajustamos la altura para dispositivos móviles más pequeños */
+  }
+}

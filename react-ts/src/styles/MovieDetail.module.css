@@ -83,3 +83,13 @@
 .loading-container p {
   margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+  .movie-detail-container {
+    grid-template-columns: 1fr;
+  }
+
+  .back-button {
+    left: 20px;
+  }
+}
