@@ -1,0 +1,51 @@
+.movie-card {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 415px;
+  width: 350px;
+}
+.clickable {
+  cursor: pointer;
+}
+
+.container-card {
+  padding: 0px;
+}
+.imange-container {
+  height: 207px;
+  grid-area: 1/1/2/2;
+}
+.movie-poster {
+  width: 230px;
+  height: 300px;
+  border-radius: 25px;
+  object-fit: cover;
+}
+.movie-info {
+  padding: 10px;
+  margin: 90px 100px 100px 0px;
+}
+.movie-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  margin: 0px;
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.movie-year {
+  font-size: 18px;
+  color: white;
+  margin: 0;
+}
+.movie-genre {
+  font-size: 15px;
+  color: white;
+  margin: 0px 0px 5px 0px;
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

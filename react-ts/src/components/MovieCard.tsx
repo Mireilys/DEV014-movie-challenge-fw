@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Movie } from "../models/Movie";
-import "../App.css";
+import styles from "../styles/MovieCard.module.css";
 
 interface MovieCardProps {
   movie: Movie;
@@ -24,18 +24,22 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <div
       data-testid={`movie-card-${movie.id}`}
-      className="movie-card"
+      className={styles["movie-card"]}
       onClick={handleCardClick}
     >
-      <div className="container-card">
-        <div className="imange-container">
-          <img src={imageUrl} alt={movie.title} className="movie-poster" />
+      <div className={styles["container-card"]}>
+        <div className={styles["imange-container"]}>
+          <img
+            src={imageUrl}
+            alt={movie.title}
+            className={styles["movie-poster"]}
+          />
         </div>
       </div>
-      <div className="movie-info">
-        <h2 className="movie-title">{movie.title}</h2>
-        <p className="movie-year">{releaseYear}</p>
-        <p className="movie-genre">{genre}</p>
+      <div className={styles["movie-info"]}>
+        <h2 className={styles["movie-title"]}>{movie.title}</h2>
+        <p className={styles["movie-year"]}>{releaseYear}</p>
+        <p className={styles["movie-genre"]}>{genre}</p>
       </div>
     </div>
   );

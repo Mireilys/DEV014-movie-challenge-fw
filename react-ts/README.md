@@ -1,30 +1,39 @@
-# React + TypeScript + Vite
+# Mi Lista de Películas Favoritas 🎬
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+¡Bienvenid@ a Mi Lista de Películas Favoritas! Este proyecto fue creado con pasión para ofrecerte una experiencia única al descubrir y disfrutar películas. 🎬
 
-Currently, two official plugins are available:
+## Descripción del Producto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Mi Lista de Películas Favoritas es una plataforma interactiva que te permite ver, filtrar y ordenar películas utilizando datos de The Movie Database API V3. 🌟
 
-## Expanding the ESLint configuration
+## Funcionalidades Principales
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Descubre Películas**: Explora un extenso catálogo de películas con información detallada de cada una. 📖
+- **Filtra Películas**: Encuentra películas basadas en su género. 🔎
+- **Ordena Películas**: Clasifica las películas por popularidad, calificación, en orden ascendente o descendente. 📊
+- **Paginación**: Utiliza la paginación al final de la página para navegar entre diferentes páginas del catálogo. 📃
+- **Información Detallada**: Al seleccionar una película, serás redirigido a una página con información completa sobre ella (título, año de estreno, calificación y sinopsis). 📝
+- **Botón de Regreso**: Incluye un botón de "Regresar" para volver fácilmente a la lista de películas. 🔙
+- **Botón para Restablecer Filtros**: Dos botones dedicados a restablecer los filtros aplicados, mejorando la eficiencia en la búsqueda. 🧼
 
-- Configure the top-level `parserOptions` property like this:
+## Características Técnicas
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- **SPA con Múltiples Vistas**: Aplicación de una sola página (SPA) que proporciona una experiencia de usuario fluida y dinámica. 💻
+- **Enrutamiento Eficiente**: Navegación sencilla dentro de la aplicación utilizando `react-router-dom` para un enrutamiento integrado. 🌐
+- **Gestión de Parámetros con `useParams`**: Los parámetros de las rutas se actualizan dinámicamente utilizando el hook `useParams`, asegurando una gestión efectiva de la información. 🔄
+- **Navegación Suave con `useNavigate`**: La navegación entre rutas se maneja con el hook `useNavigate`, proporcionando transiciones suaves entre vistas. 🚀
+- **Actualización Automática de URL y Título**: La URL y el título del documento se actualizan automáticamente según la vista actual, ofreciendo una navegación coherente. 📝
+- **Carga Inicial Sin Problemas**: La aplicación carga automáticamente la vista correspondiente a la URL actual al iniciar, facilitando una exploración sin interrupciones. 🚀
+- **Interfaz de Usuario Amigable**: Diseño intuitivo y fácil de usar para una mejor experiencia del usuario. 🎨
+- **Indicador de Carga**: Muestra un spinner durante la carga de datos, proporcionando retroalimentación visual al usuario. ⏳
+- **Manejo de Errores**: En caso de errores, se muestran notificaciones para mantener informado al usuario. ⚠️
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Tecnologías Utilizadas
+
+- **React**: Para construir una interfaz de usuario interactiva y moderna. ⚛️
+- **TypeScript**: Para asegurar un código de alta calidad con tipado estático y herramientas avanzadas de desarrollo. 🛠️
+- **react-router-dom**: Para manejar las rutas de la aplicación, facilitando la navegación entre vistas con los hooks `useParams` y `useNavigate`. 🛣️
+
+## ¡Empieza a Explorar!
+
+Sumérgete en el mundo del cine y disfruta de una experiencia excepcional con Mi Lista de Películas Favoritas. 🌟

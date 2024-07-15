@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom"; //*se agrega el hook useSearchParams para gestionar el estado de la URL
 import MovieList from "./MovieList";
 import APIService from "../services/APIService";
+import movieService from "../services/movieService";
 import { Movie } from "../models/Movie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "./Pagination";
 import ListOptions from "../components/ListOptions";
 import { formatGenresToOptions } from "../utils/transformers";
+import styles from "../styles/Home.module.css";
 
 interface Option {
   value: string;
@@ -31,7 +33,6 @@ const Home: React.FC = () => {
   }, [currentPage, selectedGenreId, selectedSortBy]);
 
   const fetchMovies = (page: number) => {
-    console.log("Fetching movies for page:", page);
     setIsLoading(true);
     setError(null);
 
@@ -43,13 +44,12 @@ const Home: React.FC = () => {
 
     APIService.getMovies({ filters })
       .then((data) => {
-        console.log("Movies fetched:", data);
+        //console.log("Movies fetched:", data);
         setMovies(data.movies);
         setTotalPages(data.metaData.pagination.totalPages);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching movies:", error);
         setError(
           "Error al recuperar películas. Por favor, inténtelo de nuevo más tarde."
         );
@@ -57,19 +57,16 @@ const Home: React.FC = () => {
       });
   };
   const fetchMovieGenres = () => {
-    APIService.getMovieGenres()
+    movieService
+      .getMovieGenres()
       .then((genres) => {
         setGenres(genres);
-        console.log("Movie Genres:", genres); // Mostrar los géneros de películas en la consola
       })
-      .catch((error) => {
-        console.error("Error fetching movie genres:", error);
-      });
+      .catch((error) => {});
   };
 
   const handlePageChange = (page: number) => {
     setSearchParams((prevParams) => {
-      console.log("que recibe", setSearchParams);
       prevParams.set("currentPage", page.toString());
       return prevParams;
     });
@@ -104,7 +101,10 @@ const Home: React.FC = () => {
   };
   if (isLoading) {
     return (
-      <div className="loading-container" data-testid="loading-spinner">
+      <div
+        className={styles["loading-container"]}
+        data-testid="loading-spinner"
+      >
         <FontAwesomeIcon icon={faSpinner} spin size="3x" />
         <p>Loading...</p>
       </div>
@@ -113,24 +113,26 @@ const Home: React.FC = () => {
 
   if (error) {
     return (
-      <div className="error-container" data-testid="error-message">
-        <div className="error-message">{error}</div>
+      <div className={styles["error-container"]} data-testid="error-message">
+        <div className={styles["error-message"]}>{error}</div>
       </div>
     );
   }
 
   const genreOptions = formatGenresToOptions(genres);
   const sortOptions = [
-    { value: "popularity.desc", label: "Popularity Descending" },
-    { value: "popularity.asc", label: "Popularity Ascending" },
-    // Agrega más opciones de ordenamiento según sea necesario
+    { value: "popularity.desc", label: "Popularidad Descendente" },
+    { value: "popularity.asc", label: "Popularidad Ascendente" },
   ];
 
   return (
-    <div className="home-container" data-testid="movie-list-container">
-      <h1 className="title">Mi lista de películas favoritas</h1>
-      <div className="home-section">
-        <div className="genre-options">
+    <div
+      className={styles["home-container"]}
+      data-testid="movie-list-container"
+    >
+      <h1 className={styles["title"]}>Mi lista de películas favoritas</h1>
+      <div className={styles["home-section"]}>
+        <div className={styles["genre-options"]}>
           <ListOptions
             options={genreOptions}
             selectedOption={
@@ -151,7 +153,7 @@ const Home: React.FC = () => {
             label="Filtrar por género" // Pasar el texto deseado como `label`
           />
         </div>
-        <div className="sort-options">
+        <div className={styles["sort-options"]}>
           <ListOptions
             options={sortOptions}
             selectedOption={

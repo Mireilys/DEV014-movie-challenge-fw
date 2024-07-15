@@ -1,5 +1,5 @@
 import React from "react";
-import "../App.css";
+import styles from "../styles/ListOptions.module.css";
 
 interface Option {
   value: string;
@@ -22,10 +22,10 @@ const ListOptions: React.FC<ListOptionsProps> = ({
   label, // Destructurar el prop `label`
 }) => {
   return (
-    <div className="list-options">
-      <div className="list-options-container">
+    <div className={styles["list-options"]}>
+      <div className={styles["list-options-container"]}>
         <select
-          id="list-options-select"
+          id={styles["list-options-select"]}
           value={selectedOption?.value || ""}
           onChange={(e) => {
             const selected = options.find(
@@ -35,7 +35,7 @@ const ListOptions: React.FC<ListOptionsProps> = ({
               onChange(selected);
             }
           }}
-          className="list-options-select"
+          className={styles["list-options-select"]}
           aria-label={label} // o usa title={label}
         >
           <option value="" disabled>
@@ -48,7 +48,10 @@ const ListOptions: React.FC<ListOptionsProps> = ({
           ))}
         </select>
         {selectedOption && (
-          <button onClick={onClear} className="list-options-clear-button">
+          <button
+            onClick={onClear}
+            className={styles["list-options-clear-button"]}
+          >
             Limpiar
           </button>
         )}

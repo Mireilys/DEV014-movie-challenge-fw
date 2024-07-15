@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom"; // Importar jest-dom para tener acceso a los matchers extendidos como toBeInTheDocument
+import "@testing-library/jest-dom";
 import ListOptions from "../components/ListOptions";
 
 describe("ListOptions", () => {

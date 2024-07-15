@@ -1,0 +1,31 @@
+.list-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 25px;
+  margin-bottom: 16px;
+}
+
+#list-options-select {
+  border-radius: 25px;
+  padding: 8px 16px;
+  width: 220px;
+  border: 2px solid black;
+  color: black;
+  font-weight: 20;
+  font-size: 16px;
+}
+.list-options-clear-button {
+  border-radius: 25px;
+  width: 100px;
+  border: 2px solid black;
+  color: black;
+  font-weight: 20;
+  font-size: 16px;
+  cursor: pointer;
+}
+.list-options-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
