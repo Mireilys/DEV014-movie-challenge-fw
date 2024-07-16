@@ -6,10 +6,8 @@ import "./App.css";
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <div className="app-container">
-        <div className="title-container"></div>
-      </div>
+    <div className="app-container">
+      <div className="title-container"></div>
       <div className="filter-movie">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -17,7 +15,7 @@ const App: React.FC = () => {
           <Route path="/movie/:id" element={<MovieDetail />} />
         </Routes>
       </div>
-    </Router>
+    </div>
   );
 };
 
